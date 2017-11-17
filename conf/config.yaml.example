@@ -1,0 +1,8 @@
+dev: false
+server: http://127.0.0.1:8080
+nginx_test: ["/etc/init.d/nginx","configtest"]
+nginx_reload: ["/etc/init.d/nginx","reload"]
+nginx_config_path: "/path/to/nginx-config-dir"
+## mac
+#nginx_test: ["/usr/local/bin/nginx", "-t"]
+#nginx_reload: ["/usr/local/bin/nginx", "-s", "reload"]
