@@ -17,6 +17,7 @@ type Config struct {
 	NginxTest       []string `yaml:"nginx_test"`
 	NginxReload     []string `yaml:"nginx_reload"`
 	NginxConfigPath string   `yaml:"nginx_config_path"`
+  MachineID string `yaml:"machine_id"`
 }
 
 var config *Config
