@@ -6,18 +6,20 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v2"
 	"path"
+  "net/url"
 )
 
 
 
 //Config 配置文件
 type Config struct {
-	Dev bool `yaml:"dev"`
 	Server string `yaml:"server"`
 	NginxTest       []string `yaml:"nginx_test"`
 	NginxReload     []string `yaml:"nginx_reload"`
 	NginxConfigPath string   `yaml:"nginx_config_path"`
   MachineID string `yaml:"machine_id"`
+  PrivateKey string `yaml:"private_key"`
+  CheckServer string `yaml:"-"`
 }
 
 var config *Config
@@ -32,6 +34,19 @@ func InitConfig(source string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	//校验配置
+	if u, err:= url.Parse(config.Server); err!=nil{
+	  fmt.Println("服务器地址配置错误")
+	  return nil, err
+  }else{
+    u.Path = path.Join(u.Path, "/task")
+    checkU, _:= url.Parse(config.Server)
+    checkU.Path = path.Join(checkU.Path, "/task/check")
+    config.Server = u.String()
+    config.CheckServer = checkU.String()
+  }
+
+
 	return config, nil
 }
 

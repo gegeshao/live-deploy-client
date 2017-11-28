@@ -3,30 +3,41 @@ package main
 import (
 	"live-deploy-client/utils"
 	"log"
-	"fmt"
-	"time"
+	"live-deploy-client/task"
+  "fmt"
 )
 
 func main(){
-	_, err := utils.InitConfig("./conf/config.yaml")
+	config, err := utils.InitConfig("./conf/config.yaml")
 	if err != nil {
+	  fmt.Println(err,999)
 		log.Fatalln(err)
 		return
 	}
-	taskTimer := make(chan int)
-	go func(){
-		for {
-			taskTimer <- 1
-			time.Sleep(1 * time.Second)
-		}
- 	}()
+	//校验密钥
+  if len(config.PrivateKey) != 24{
+    log.Fatalln("密钥错误!")
+  }
 
- 	func(){
- 		for{
- 			<-taskTimer
- 			fmt.Println(time.Now().Format("15:04:05"))
- 			time.Sleep(2 * time.Second)
-		}
-	}()
+  if err:=task.Check(); err!=nil{
+    log.Fatalln("密钥错误!")
+  }
+
+
+	//taskTimer := make(chan int)
+	//go func(){
+	//	for {
+	//		taskTimer <- 1
+	//		time.Sleep(1 * time.Second)
+	//	}
+ 	//}()
+  //
+ 	//func(){
+ 	//	for{
+ 	//		<-taskTimer
+ 	//		fmt.Println(time.Now().Format("15:04:05"))
+ 	//		time.Sleep(2 * time.Second)
+	//	}
+	//}()
 
 }
