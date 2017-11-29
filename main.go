@@ -5,6 +5,8 @@ import (
 	"log"
 	"live-deploy-client/task"
   "live-deploy-client/schema"
+  "time"
+  "fmt"
 )
 
 func main(){
@@ -27,20 +29,19 @@ func main(){
   }
 
 
-	//taskTimer := make(chan int)
-	//go func(){
-	//	for {
-	//		taskTimer <- 1
-	//		time.Sleep(1 * time.Second)
-	//	}
- 	//}()
-  //
- 	//func(){
- 	//	for{
- 	//		<-taskTimer
- 	//		fmt.Println(time.Now().Format("15:04:05"))
- 	//		time.Sleep(2 * time.Second)
-	//	}
-	//}()
+	taskTimer := make(chan int)
+	go func(){
+		for {
+			taskTimer <- 1
+			time.Sleep(1 * time.Second)
+		}
+ 	}()
+
+ 	func(){
+ 		for{
+ 			<-taskTimer
+ 			task.Get()
+		}
+	}()
 
 }

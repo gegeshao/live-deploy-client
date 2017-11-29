@@ -16,7 +16,7 @@ type Task struct {
   Status int `xorm:"task_id"` //-2 失败 未发送  -1 已完成 未发送 1 已完成 已发送  2 失败，已发送
 }
 
-
+           
 
 var engine *xorm.Engine
 
