@@ -86,6 +86,28 @@ func CFBEncrypt(key []byte, plaintext []byte)(result []byte, encErr error){
 	return ciphertext, nil
 }
 
+func CFBDecrypt(key []byte, ciphertext []byte)(result []byte, encErr error){
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it's common to
+	// include it at the beginning of the ciphertext.
+	if len(ciphertext) < aes.BlockSize {
+		return nil, fmt.Errorf("ciphertext too short")
+	}
+	iv := ciphertext[:aes.BlockSize]
+	ciphertext = ciphertext[aes.BlockSize:]
+
+	stream := cipher.NewCFBDecrypter(block, iv)
+
+	// XORKeyStream can work in-place if the two arguments are the same.
+	stream.XORKeyStream(ciphertext, ciphertext)
+	result, encErr = PKCS7Trimming(ciphertext, aes.BlockSize)
+	return
+}
+
 // encrypt string to base64 crypto using AES key长24位
 func CFBEncryptString(key []byte, text string) (string, error) {
 	// key := []byte(keyText)

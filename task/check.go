@@ -9,6 +9,9 @@ import (
   "bytes"
 )
 
+/*
+时间戳 + 机器id 用 private_key 进行加密发送
+*/
 func Check() error{
   config:= utils.GetConfig()
   jsonBody := map[string]interface{}{
@@ -23,11 +26,13 @@ func Check() error{
   }
   req, err:= http.NewRequest("POST", config.CheckServer , bytes.NewBuffer(encrypData))
   if err!=nil{
+    fmt.Println(err)
     return err
   }
   req.Header.Set("private-key", config.MachineID)
   resp, err:= client.Do(req)
   if err!=nil{
+    fmt.Println(err)
     return err
   }
   if resp.StatusCode != 200{
