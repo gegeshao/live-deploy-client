@@ -20,6 +20,18 @@
   version = "v0.6.3"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/huyinghuan/cfb"
+  packages = ["."]
+  revision = "75fed27716e68bc7b4e122141ed3c53a5553df4a"
+
+[[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "3b3f1d01b2696af5501697c35629048c227586ab"
+  version = "v1.1.0"
+
+[[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -28,6 +40,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "02a75b2eb131ddd8312e61bc582de8f487cc122cb098e78f857c7d58e1fa0f54"
+  inputs-digest = "2b9ca4515b99f59aef0774daae3c8fa431176a9bab873de5fce90298f58c59ba"
   solver-name = "gps-cdcl"
   solver-version = 1

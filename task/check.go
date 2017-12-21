@@ -7,6 +7,7 @@ import (
   "time"
   "encoding/json"
   "bytes"
+  "github.com/huyinghuan/cfb"
 )
 
 /*
@@ -20,19 +21,18 @@ func Check() error{
   }
   sendData, _:= json.Marshal(jsonBody)
 
-  encrypData, err:= utils.CFBEncrypt([]byte(config.PrivateKey), sendData)
+  encrypData, err:= cfb.Encrypt([]byte(config.PrivateKey), sendData)
   if err!=nil{
     return err
   }
-  req, err:= http.NewRequest("POST", config.CheckServer , bytes.NewBuffer(encrypData))
+
+  req, err:= http.NewRequest("POST", utils.GetAPIPath("/task/check") , bytes.NewBuffer(encrypData))
   if err!=nil{
-    fmt.Println(err)
     return err
   }
   req.Header.Set("private-key", config.MachineID)
   resp, err:= client.Do(req)
   if err!=nil{
-    fmt.Println(err)
     return err
   }
   if resp.StatusCode != 200{

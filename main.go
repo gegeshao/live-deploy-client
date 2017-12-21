@@ -23,6 +23,7 @@ func main(){
     log.Fatalln("密钥错误!")
   }
   if err:=task.Check(); err!=nil{
+  	log.Println(err)
     log.Fatalln("密钥错误!")
   }
 

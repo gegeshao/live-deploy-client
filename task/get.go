@@ -9,6 +9,7 @@ import (
   "bytes"
   "live-deploy-client/schema"
   "fmt"
+  "github.com/huyinghuan/cfb"
 )
 var (
   client = &http.Client{}
@@ -42,14 +43,12 @@ func Get(){
     return
   }
 
-  r, err:= utils.CFBDecrypt([]byte(cfbKey), body)
+  r, err:= cfb.Decrypt([]byte(cfbKey), body)
+  log.Println(r)
   if err!=nil{
     log.Println("任务解析失败", err)
   }
-  var buf bytes.Buffer
-  buf.Read(r)
-  dec := gob.NewDecoder(&buf)
+  dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task
   dec.Decode(&taskList)
-  fmt.Println(taskList)
 }
