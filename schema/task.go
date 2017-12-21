@@ -13,6 +13,8 @@ type Task struct {
   TrackKey     int64  `xorm:"track_key" json:"track_key"` //可追踪
   TaskID string `xorm:"task_id" json:"task_id"` //任务id
   Content string `xorm:"content" json:"content"` //完成任务结果
+  Type string `xorm:"type"` //任务类型
+  Action string `xorm:"action"` //任务动作
   Status int `xorm:"task_id"` //-2 失败 未发送  -1 已完成 未发送 1 已完成 已发送  2 失败，已发送
 }
 

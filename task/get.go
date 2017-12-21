@@ -1,6 +1,7 @@
 package task
 
 import (
+  "live-deploy-client/task/allocation"
   "live-deploy-client/utils"
   "net/http"
   "log"
@@ -8,7 +9,6 @@ import (
   "encoding/gob"
   "bytes"
   "live-deploy-client/schema"
-  "fmt"
   "github.com/huyinghuan/cfb"
 )
 var (
@@ -51,4 +51,9 @@ func Get(){
   dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task
   dec.Decode(&taskList)
+
+
+  for _, task:= range taskList{
+    allocation.DoTask(&task)
+  }
 }
