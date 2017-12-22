@@ -3,7 +3,7 @@ package allocation
 import (
   "fmt"
   "live-deploy-client/schema"
-  //"live-deploy-client/utils"
+  "live-deploy-client/utils"
   "log"
 
   "github.com/yuin/gopher-lua"
@@ -12,16 +12,20 @@ import (
 func DoTask(task *schema.Task){
   L:=lua.NewState()
   defer L.Close()
-  if err:= L.DoString(`
-    require("scripts/nginx")
-  `); err!=nil{
+  L.PreloadModule("gosystem", Loader)
+  script, err:=utils.GetScript(task.Type)
+  if err!=nil{
+    TaskFail(task, fmt.Errorf("没有任务处理模板"))
+    return
+  }
+  if err:= L.DoString(script); err!=nil{
     TaskFail(task, err)
     return
   }
-  fn:=L.GetGlobal("nginx").(*lua.LTable)
+  fn:=L.GetGlobal(task.Type).(*lua.LTable)
 
   p:=lua.P{
-    Fn: L.GetField(fn, "deploy"),
+    Fn: L.GetField(fn, task.Action),
     NRet: 1,
     Protect:true,
   }
@@ -39,18 +43,11 @@ func DoTask(task *schema.Task){
   status:=tabl.RawGetString("status")
   scriptResult:= tabl.RawGetString("result")
   success := false
-  if status.Type() == lua.LTNumber{
-    // 脚本退出状态码  1 错误退出  0 正常退出
-    if lua.LVAsNumber(status) == 0 {
-      success = true
-    }
-  }else if status.Type() == lua.LTBool{
-    // 脚本返回码  true 正常 false 错误
-    success = lua.LVAsBool(status)
-  }else{
-    TaskFail(task, fmt.Errorf("脚本插件错误: 返回值字段类型错误, status 必须为bool或0或1"))
+  if status.Type() != lua.LTBool {
+    TaskFail(task, fmt.Errorf("脚本插件错误: 返回值字段类型错误, status 必须为bool"))
     return
   }
+  success = lua.LVAsBool(status)
   if scriptResult.Type() != lua.LTString{
     TaskFail(task, fmt.Errorf("脚本插件错误: 返回值字段类型错误, result 必须为 string"))
     return
@@ -60,8 +57,6 @@ func DoTask(task *schema.Task){
     TaskFail(task, fmt.Errorf(result))
     return
   }
+  log.Println("任务成功:", result)
 }
 
-func TaskFail(task *schema.Task, err error){
-  log.Println(err)
-}
