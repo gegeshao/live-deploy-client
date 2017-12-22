@@ -44,7 +44,6 @@ func Get(){
   }
 
   r, err:= cfb.Decrypt([]byte(cfbKey), body)
-  log.Println(r)
   if err!=nil{
     log.Println("任务解析失败", err)
   }

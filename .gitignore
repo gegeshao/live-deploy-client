@@ -2,3 +2,4 @@
 vendor
 .idea
 *.db
+live-deploy-client
