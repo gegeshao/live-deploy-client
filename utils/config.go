@@ -23,7 +23,7 @@ type Config struct {
 }
 
 var config *Config
-
+var configInterface interface{}
 //InitConfig 读取配置文件
 func InitConfig(source string) (*Config, error) {
 	configBytes, err := ioutil.ReadFile(source)
@@ -39,6 +39,7 @@ func InitConfig(source string) (*Config, error) {
 	  fmt.Println("服务器地址配置错误")
 	  return nil, err
   }else{
+    yaml.Unmarshal(configBytes, &configInterface)
     u.Path = path.Join(u.Path, "/task")
     checkU, _:= url.Parse(config.Server)
     checkU.Path = path.Join(checkU.Path, "/task/check")
@@ -53,6 +54,10 @@ func InitConfig(source string) (*Config, error) {
 //GetConfig 获取配置文件
 func GetConfig() *Config {
 	return config
+}
+
+func GetConfigInterface() interface{} {
+  return configInterface
 }
 
 

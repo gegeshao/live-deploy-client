@@ -7,10 +7,8 @@ import ("github.com/yuin/gopher-lua"
 func Loader(L *lua.LState) int{
   mod := L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
     "execute":              luaModule.Execute,
-    "f": func(L *lua.LState) int{
-      L.Push(lua.LString("hello"))
-      return 1
-    },
+    "getConfig": luaModule.GetConfig,
+    "path": luaModule.Path,
   })
   L.Push(mod)
   return 1
