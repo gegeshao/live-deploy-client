@@ -3,30 +3,25 @@ package allocation
 import (
   "fmt"
   "live-deploy-client/schema"
-  "live-deploy-client/utils"
+  //"live-deploy-client/utils"
   "log"
 
   "github.com/yuin/gopher-lua"
 )
 
-type LuaResult struct{
-  Status string
-  Result string
-}
 func DoTask(task *schema.Task){
   L:=lua.NewState()
   defer L.Close()
-  content, err:= utils.GetScript(task.Type)
-  if err!=nil{
+  if err:= L.DoString(`
+    require("scripts/nginx")
+  `); err!=nil{
     TaskFail(task, err)
     return
   }
-  if err:=L.DoString(content); err!=nil{
-    TaskFail(task, err)
-    return
-  }
+  fn:=L.GetGlobal("nginx").(*lua.LTable)
+
   p:=lua.P{
-    Fn: L.GetGlobal(task.Action),
+    Fn: L.GetField(fn, "deploy"),
     NRet: 1,
     Protect:true,
   }

@@ -50,8 +50,6 @@ func Get(){
   dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task
   dec.Decode(&taskList)
-
-
   for _, task:= range taskList{
     allocation.DoTask(&task)
   }

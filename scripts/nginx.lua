@@ -1,4 +1,10 @@
-function nginxTest()
+--[[
+    nginx 模块
+    模块必须实现一下两个方法， deploy,  undeploy
+]]--
+
+nginx = {}
+local function nginxTest()
     local testOk = os.execute("nginx -t")
     local msg = ""
 
@@ -12,7 +18,7 @@ function nginxTest()
     return testOk, msg
 end
 
-function nginxReload()
+local function nginxReload()
     local testOk, msg = nginxTest()
     if not testOk then return {status=testOk, result=msg} end
 
@@ -32,6 +38,11 @@ function nginxReload()
     }
 end
 
-function deploy(trackID, trackKey, Content)
+function nginx.deploy(trackID, trackKey, Content)
     return nginxReload()
 end
+
+function nginx.undeploy(trackID, trackKey)
+end
+
+return nginx
