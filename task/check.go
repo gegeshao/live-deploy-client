@@ -26,7 +26,7 @@ func Check() error{
     return err
   }
 
-  req, err:= http.NewRequest("POST", utils.GetAPIPath("/task/check") , bytes.NewBuffer(encrypData))
+  req, err:= http.NewRequest("POST", config.CheckServer , bytes.NewBuffer(encrypData))
   if err!=nil{
     return err
   }
@@ -39,4 +39,9 @@ func Check() error{
     return fmt.Errorf("验证错误, status : %d", resp.StatusCode)
   }
   return nil
+}
+
+//检查任务是否已完成
+func CheckTaskIsFinish() bool{
+  return false
 }

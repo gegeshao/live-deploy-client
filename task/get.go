@@ -10,6 +10,7 @@ import (
   "bytes"
   "live-deploy-client/schema"
   "github.com/huyinghuan/cfb"
+  "live-deploy-client/task"
 )
 var (
   client = &http.Client{}
@@ -19,7 +20,7 @@ func Get(){
   machineKey := config.MachineID
   cfbKey := config.PrivateKey
   // 获取已完成任务列表
-  req, _ := http.NewRequest("POST", config.Server, nil)
+  req, _ := http.NewRequest("POST", config.TaskServer, nil)
   req.Header.Set("private-key", machineKey)
   resp, err:=client.Do(req)
   if err!=nil{
@@ -50,7 +51,17 @@ func Get(){
   dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task
   dec.Decode(&taskList)
+
+  taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
-    allocation.DoTask(&task)
+    taskDone:=allocation.DoTask(&task)
+    taskDoneList = append(taskDoneList, taskDone)
   }
+  //发送完成状态
+  resultBody, err:=utils.EncryptInterface(cfbKey, &taskDoneList)
+  if err != nil{
+    log.Println(err)
+    return
+  }
+  task.Post()
 }
