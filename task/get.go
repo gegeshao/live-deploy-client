@@ -33,6 +33,7 @@ func Get(){
   }
   //没有任务
   if resp.Header.Get("task-count") == "none"{
+    log.Println("没有任务")
     return
   }
 
@@ -50,7 +51,6 @@ func Get(){
   dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task
   dec.Decode(&taskList)
-
   taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
     taskDone:=allocation.DoTask(&task)

@@ -4,6 +4,7 @@ import (
   "fmt"
   "live-deploy-client/schema"
   "live-deploy-client/utils"
+  "log"
 
   "github.com/yuin/gopher-lua"
 )
@@ -23,9 +24,9 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
       Status: status,
       Result:  existTask.Result,
     }
+  }else{
+    log.Println("任务已完成")
   }
-
-
   L:=lua.NewState()
   defer L.Close()
   L.PreloadModule("gosystem", Loader)
@@ -73,7 +74,6 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
     return TaskFail(task, result)
 
   }
-
   schema.AddTask(task)
   return schema.TaskClientFinish{
     ID: task.TaskID,
