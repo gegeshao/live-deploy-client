@@ -9,7 +9,23 @@ import (
 )
 
 func DoTask(task *schema.Task) schema.TaskClientFinish{
+
+  task.TaskID = task.ID
+
   //TODO 检查是否已经完成
+  if existTask, err:=schema.GetTaskByID(task.ID); existTask !=nil && err == nil{
+    status:= false
+    if existTask.Status == 1 {
+      status = true
+    }
+    return schema.TaskClientFinish{
+      ID: task.TaskID,
+      Status: status,
+      Result:  existTask.Result,
+    }
+  }
+
+
   L:=lua.NewState()
   defer L.Close()
   L.PreloadModule("gosystem", Loader)
@@ -57,11 +73,12 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
     return TaskFail(task, result)
 
   }
-  //log.Println("任务成功:", result)
+
+  schema.AddTask(task)
   return schema.TaskClientFinish{
     ID: task.TaskID,
     Status: true,
-    Content:  result,
+    Result:  result,
   }
 }
 

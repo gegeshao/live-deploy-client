@@ -1,7 +1,8 @@
 package main
 
 import (
-	"live-deploy-client/utils"
+  "live-deploy-client/schema"
+  "live-deploy-client/utils"
 	"log"
 	"live-deploy-client/task"
   //"live-deploy-client/schema"
@@ -14,10 +15,10 @@ func main(){
 		log.Fatalln(err)
 		return
 	}
-  //if err:= schema.InitDriver(); err!=nil{
-  //  log.Fatalln(err)
-	 // return
-  //}
+  if err:= schema.InitDriver(); err!=nil{
+    log.Fatalln(err)
+	  return
+  }
 	//校验密钥
   if len(config.PrivateKey) != 24{
     log.Fatalln("密钥错误!")

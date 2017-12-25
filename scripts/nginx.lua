@@ -16,7 +16,6 @@ function nginx.deploy(trackID, trackKey, content)
     config = gosystem.getConfig()
     nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "id-"..trackID .. ".conf")
     status, errorInfo = pcall(writeFile, nginxConfigPath, content)
-    print(status, errorInfo)
     if(not status) then return {status = false, result = errorInfo} end
     ok, msg = gosystem.execute("nginx", "-t")
     if not ok then

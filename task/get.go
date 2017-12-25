@@ -10,7 +10,6 @@ import (
   "bytes"
   "live-deploy-client/schema"
   "github.com/huyinghuan/cfb"
-  "live-deploy-client/task"
 )
 var (
   client = &http.Client{}
@@ -63,5 +62,5 @@ func Get(){
     log.Println(err)
     return
   }
-  task.Post()
+  Post(resultBody)
 }
