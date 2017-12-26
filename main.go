@@ -5,6 +5,8 @@ import (
   "live-deploy-client/utils"
 	"log"
 	"live-deploy-client/task"
+  "time"
+
   //"live-deploy-client/schema"
   //"time"
 )
@@ -28,20 +30,20 @@ func main(){
     log.Fatalln("密钥错误!")
   }
 
-	task.Get()
-	//taskTimer := make(chan int)
-	//go func(){
-	//	for {
-	//		taskTimer <- 1
-	//		time.Sleep(1 * time.Second)
-	//	}
- 	//}()
-  //
- 	//func(){
- 	//	for{
- 	//		<-taskTimer
- 	//		task.Get()
-	//	}
-	//}()
+	//task.Get()
+	taskTimer := make(chan int)
+	go func(){
+		for {
+			taskTimer <- 1
+			time.Sleep(5 * time.Second)
+		}
+ 	}()
+
+ 	func(){
+ 		for{
+ 			<-taskTimer
+ 			task.Get()
+		}
+	}()
 
 }

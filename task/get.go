@@ -53,7 +53,8 @@ func Get(){
   dec.Decode(&taskList)
   taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
-    taskDone:=allocation.DoTask(&task)
+    //做任务去
+    taskDone := allocation.DoTask(&task)
     taskDoneList = append(taskDoneList, taskDone)
   }
   //发送完成状态

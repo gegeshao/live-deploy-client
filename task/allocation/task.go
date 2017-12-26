@@ -74,6 +74,7 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
     return TaskFail(task, result)
 
   }
+  //记录完成任务到本地日志
   schema.AddTask(task)
   return schema.TaskClientFinish{
     ID: task.TaskID,
