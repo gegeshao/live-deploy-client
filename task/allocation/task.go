@@ -39,10 +39,12 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
     return TaskFail(task, fmt.Sprintf("%v", err))
 
   }
-  fn:=L.GetGlobal(task.Type).(*lua.LTable)
-
+  tab:=L.GetGlobal(task.Type).(*lua.LTable)
+  if L.GetField(tab, task.Action) == lua.LNil{
+    return TaskFail(task, "脚本插件错误: 脚本缺少任务函数:"+task.Action)
+  }
   p:=lua.P{
-    Fn: L.GetField(fn, task.Action),
+    Fn: L.GetField(tab, task.Action),
     NRet: 1,
     Protect:true,
   }

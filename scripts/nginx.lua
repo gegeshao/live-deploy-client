@@ -27,9 +27,24 @@ function nginx.deploy(trackID, trackKey, content)
     reloadOk, result = gosystem.execute("nginx", "-s", "reload")
     return {
         status = reloadOk,
-        result=result
+        result= mgs.."\n"..result
     }
 end
 
-function nginx.undeploy(trackID, trackKey)
+function nginx.undeploy(trackID, trackKey, content)
+    config = gosystem.getConfig()
+    nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "id-"..trackID .. ".conf")
+    os.remove(nginxConfigPath)
+    ok, msg = gosystem.execute("nginx", "-t")
+    if not ok then
+        return {
+            status = ok,
+            result=msg
+        }
+    end
+    reloadOk, result = gosystem.execute("nginx", "-s", "reload")
+    return {
+        status = reloadOk,
+        result= msg.."\n"..result
+    }
 end
