@@ -3,13 +3,10 @@ package allocation
 import (
   "fmt"
   "live-deploy-client/schema"
-  "live-deploy-client/utils"
-  "log"
-
   "github.com/yuin/gopher-lua"
 )
 
-func DoTask(task *schema.Task) schema.TaskClientFinish{
+func DoTask(L *lua.LState, task *schema.Task) schema.TaskClientFinish{
 
   task.TaskID = task.ID
 
@@ -19,25 +16,12 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
     if existTask.Status == 1 {
       status = true
     }
+    //任务已完成
     return schema.TaskClientFinish{
       ID: task.TaskID,
       Status: status,
       Result:  existTask.Result,
     }
-  }else{
-    log.Println("任务已完成")
-  }
-  L:=lua.NewState()
-  defer L.Close()
-  L.PreloadModule("gosystem", Loader)
-  script, err:=utils.GetScript(task.Type)
-  if err!=nil{
-    return TaskFail(task,"没有任务处理模板")
-
-  }
-  if err:= L.DoString(script); err!=nil{
-    return TaskFail(task, fmt.Sprintf("%v", err))
-
   }
   tab:=L.GetGlobal(task.Type).(*lua.LTable)
   if L.GetField(tab, task.Action) == lua.LNil{
@@ -53,6 +37,7 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
 
   }
   ret := L.Get(-1)
+  L.Pop(1)
   tabl, ok:= ret.(*lua.LTable)
   if !ok{
     return TaskFail(task, "脚本插件错误: 错误返回值")

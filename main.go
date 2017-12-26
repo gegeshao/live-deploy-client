@@ -6,10 +6,9 @@ import (
 	"log"
 	"live-deploy-client/task"
   "time"
-
-  //"live-deploy-client/schema"
-  //"time"
 )
+
+
 
 func main(){
 	config, err := utils.InitConfig("./conf/config.yaml")
@@ -39,10 +38,14 @@ func main(){
 		}
  	}()
 
+  L, err:=task.CreateLuaVM()
+  if err !=nil{
+    log.Fatal(err)
+  }
  	func(){
  		for{
  			<-taskTimer
- 			task.Get()
+ 			task.Get(L)
 		}
 	}()
 

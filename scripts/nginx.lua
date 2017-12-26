@@ -27,7 +27,7 @@ function nginx.deploy(trackID, trackKey, content)
     reloadOk, result = gosystem.execute("nginx", "-s", "reload")
     return {
         status = reloadOk,
-        result= mgs.."\n"..result
+        result= msg.."\n"..result
     }
 end
 

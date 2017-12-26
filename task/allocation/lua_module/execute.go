@@ -14,6 +14,7 @@ func Execute(L *lua.LState) int{
   }
   cmd := exec.Command(command, params...)
   var outBuf bytes.Buffer
+
   cmd.Stderr = &outBuf
   startErr := cmd.Start()
   waritErr := cmd.Wait()

@@ -10,11 +10,12 @@ import (
   "bytes"
   "live-deploy-client/schema"
   "github.com/huyinghuan/cfb"
+  "github.com/yuin/gopher-lua"
 )
 var (
   client = &http.Client{}
 )
-func Get(){
+func Get(L *lua.LState){
   config:=utils.GetConfig()
   machineKey := config.MachineID
   cfbKey := config.PrivateKey
@@ -54,14 +55,9 @@ func Get(){
   taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
     //做任务去
-    taskDone := allocation.DoTask(&task)
+    taskDone := allocation.DoTask(L, &task)
     taskDoneList = append(taskDoneList, taskDone)
   }
   //发送完成状态
-  resultBody, err:=utils.EncryptInterface(cfbKey, &taskDoneList)
-  if err != nil{
-    log.Println(err)
-    return
-  }
-  Post(resultBody)
+  Post(utils.EncryptInterface(cfbKey, &taskDoneList))
 }

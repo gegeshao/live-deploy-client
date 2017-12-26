@@ -7,7 +7,11 @@ import (
 	"live-deploy-client/utils"
 )
 
-func Post(sendData []byte){
+func Post(sendData []byte, err error){
+  if err!=nil{
+    log.Println(err)
+    return
+  }
 	config:= utils.GetConfig()
 
 	req, err:= http.NewRequest("POST", utils.GetAPIPath("/client/task/done") , bytes.NewBuffer(sendData))
@@ -17,6 +21,7 @@ func Post(sendData []byte){
 	}
 	req.Header.Set("private-key", config.MachineID)
 	resp, err:= client.Do(req)
+
 	if err!=nil{
     log.Println(err)
 		return
