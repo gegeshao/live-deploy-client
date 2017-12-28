@@ -1,7 +1,16 @@
 # live-deploy-client
 
 ===============================
+## 编译
 
+配置好go的工作目录，下载安装 dep: https://github.com/golang/dep
+
+```
+dep ensure
+sh build
+```
+
+编译好的文件就在bin目录下
 
 ## 任务脚本
 
