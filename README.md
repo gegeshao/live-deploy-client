@@ -3,11 +3,14 @@
 ===============================
 ## 编译
 
-配置好go的工作目录，下载安装 dep: https://github.com/golang/dep
+配置好go的工作目录
+
+下载安装 dep: https://github.com/golang/dep
+下载安装 gox: https://github.com/mitchellh/gox
 
 ```
 dep ensure
-sh build
+sh build.sh
 ```
 
 编译好的文件就在bin目录下
