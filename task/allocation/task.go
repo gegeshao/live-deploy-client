@@ -3,13 +3,20 @@ package allocation
 import (
   "fmt"
   "live-deploy-client/schema"
+  "live-deploy-client/task/allocation/default_task"
+
   "github.com/yuin/gopher-lua"
 )
 
 func DoTask(L *lua.LState, task *schema.Task) schema.TaskClientFinish{
-
   task.TaskID = task.ID
-
+  if exist, status, result := default_task.DoDefalutTask(task, L); exist{
+    return schema.TaskClientFinish{
+      ID: task.TaskID,
+      Status: status,
+      Result:  result,
+    }
+  }
   //TODO 检查是否已经完成
   if existTask, err:=schema.GetTaskByID(task.ID); existTask !=nil && err == nil{
     status:= false

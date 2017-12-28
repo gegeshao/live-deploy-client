@@ -14,13 +14,12 @@ import (
 //Config 配置文件
 type Config struct {
 	Server string `yaml:"server"`
-	NginxTest       []string `yaml:"nginx_test"`
-	NginxReload     []string `yaml:"nginx_reload"`
 	NginxConfigPath string   `yaml:"nginx_config_path"`
   MachineID string `yaml:"machine_id"`
   PrivateKey string `yaml:"private_key"`
   CheckServer string `yaml:"-"`
   TaskServer string `yaml:"-"`
+  LoadDefaultTask []string `yaml:"load_default_task"`
 }
 
 var config *Config
