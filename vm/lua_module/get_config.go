@@ -1,7 +1,7 @@
 package lua_module
 
 /*
-* Thanks for https://github.com/kohkimakimoto/gluayaml/blob/master/gluayaml.go
+* Get for https://github.com/kohkimakimoto/gluayaml/blob/master/gluayaml.go
 */
 import (
   "live-deploy-client/utils"
@@ -38,7 +38,7 @@ func fromInterface(L *lua.LState, value interface{}) lua.LValue {
 }
 
 func GetConfig(L *lua.LState) int{
-  config := utils.GetConfigInterface()
+  config := utils.GetConfig().Plugin
   L.Push(fromInterface(L, config))
   return 1
 }

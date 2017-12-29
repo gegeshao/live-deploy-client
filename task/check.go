@@ -17,20 +17,20 @@ func Check() error{
   config:= utils.GetConfig()
   jsonBody := map[string]interface{}{
     "now": time.Now().Unix(),
-    "id": config.MachineID,
+    "id": config.System.MachineID,
   }
   sendData, _:= json.Marshal(jsonBody)
 
-  encrypData, err:= cfb.Encrypt([]byte(config.PrivateKey), sendData)
+  encrypData, err:= cfb.Encrypt([]byte(config.System.PrivateKey), sendData)
   if err!=nil{
     return err
   }
 
-  req, err:= http.NewRequest("POST", config.CheckServer , bytes.NewBuffer(encrypData))
+  req, err:= http.NewRequest("POST", config.System.CheckServer , bytes.NewBuffer(encrypData))
   if err!=nil{
     return err
   }
-  req.Header.Set("private-key", config.MachineID)
+  req.Header.Set("private-key", config.System.MachineID)
   resp, err:= client.Do(req)
   if err!=nil{
     return err

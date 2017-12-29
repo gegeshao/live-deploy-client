@@ -32,7 +32,7 @@ func DoDefalutTask(task *schema.Task) (exist bool, status bool,result string) {
   taskType := task.Type
   config:=utils.GetConfig()
   allow := false
-  for _, value := range config.LoadDefaultTask{
+  for _, value := range config.System.LoadDefaultTask{
     if value == taskType{
       allow = true
     }

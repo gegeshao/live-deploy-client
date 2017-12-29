@@ -17,7 +17,7 @@ func main(){
 	}
 
 	//校验密钥
-  if len(config.PrivateKey) != 24{
+  if len(config.System.PrivateKey) != 24{
     log.Fatalln("密钥错误!")
   }
   if err:=task.Check(); err!=nil{

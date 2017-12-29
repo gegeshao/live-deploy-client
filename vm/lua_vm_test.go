@@ -26,9 +26,7 @@ func TestLvm(t *testing.T){
   L:= GetLuaVM()
   L.DoString(`
     gosystem = require('gosystem')
-    status, result = gosystem.execute('date')
-    print(status, result)
-    status, result = gosystem.execute('echo', 'hahahahah')
-    print(status, result)
+
+    print(gosystem.getConfig())
   `)
 }

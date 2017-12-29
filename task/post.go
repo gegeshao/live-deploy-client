@@ -19,7 +19,7 @@ func Post(sendData []byte, err error){
     log.Println(err)
 		return
 	}
-	req.Header.Set("private-key", config.MachineID)
+	req.Header.Set("private-key", config.System.MachineID)
 	resp, err:= client.Do(req)
 
 	if err!=nil{

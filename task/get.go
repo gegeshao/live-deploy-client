@@ -16,10 +16,10 @@ var (
 )
 func Get(){
   config:=utils.GetConfig()
-  machineKey := config.MachineID
-  cfbKey := config.PrivateKey
+  machineKey := config.System.MachineID
+  cfbKey := config.System.PrivateKey
   // 获取已完成任务列表
-  req, _ := http.NewRequest("POST", config.TaskServer, nil)
+  req, _ := http.NewRequest("POST", config.System.TaskServer, nil)
   req.Header.Set("private-key", machineKey)
   resp, err:=client.Do(req)
   if err!=nil{

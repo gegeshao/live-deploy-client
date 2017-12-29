@@ -15,6 +15,17 @@ sh build.sh
 
 编译好的文件就在bin目录下
 
+## 配置
+
+请复制`conf/config.yaml.example`到运行目录下到`conf/config.yaml`.
+
+```
+server: http://127.0.0.1:8080 #获取任务的服务器地址
+machine_id: "xxx"
+private_key:"xxxx"
+load_default_task: ['UpdateScripts'] #是否允许下载脚本,为了安全性，该配置建议不使用 Download
+```
+
 ## 内置任务
 
 内置了一些可能需要的任务： UpdateScripts 等
@@ -35,7 +46,17 @@ sh build.sh
 }
 ```
 
-## 任务脚本
+## 已有任务脚本
+
+### nginx.lua
+
+请在`config.yaml`中配置以下字段
+
+```
+nginx_config_path: "/path/to/nginx-config-dir"
+```
+
+## 自定义任务脚本
 
 任务脚本采用lua 编写, 内置 `gosystem` 模块
 
