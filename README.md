@@ -15,6 +15,10 @@ sh build.sh
 
 编译好的文件就在bin目录下
 
+## 安装
+
+
+
 ## 配置
 
 请复制`conf/config.yaml.example`到运行目录下到`conf/config.yaml`.
@@ -48,9 +52,11 @@ load_default_task: ['UpdateScripts'] #是否允许下载脚本,为了安全性�
 
 ## 已有任务脚本
 
+所有任务脚本的配置 全部配置在`config.yaml`中的`plugin`的字段中
+
 ### nginx.lua
 
-请在`config.yaml`中配置以下字段
+#### 配置
 
 ```
 nginx_config_path: "/path/to/nginx-config-dir"
