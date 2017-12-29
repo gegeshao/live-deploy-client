@@ -15,6 +15,26 @@ sh build.sh
 
 编译好的文件就在bin目录下
 
+## 内置任务
+
+内置了一些可能需要的任务： UpdateScripts 等
+
+
+### UpdateScripts
+
+开启该功能需要在 config.yaml中配置`load_default_task`,使客户端能够 禁用/开启 开功能。
+
+下发任务内容
+
+```
+{
+    id: xxx,
+    type: "UpdateScripts"
+    action: filename
+    content: download-url
+}
+```
+
 ## 任务脚本
 
 任务脚本采用lua 编写, 内置 `gosystem` 模块

@@ -2,4 +2,4 @@ server: http://127.0.0.1:8080
 nginx_config_path: "/path/to/nginx-config-dir"
 machine_id: "xxx"
 private_key:"xxxx"
-load_default_task: ['download'] #是否允许下载脚本,为了安全性，该配置建议不使用 download
+load_default_task: ['UpdateScripts'] #是否允许下载脚本,为了安全性，该配置建议不使用 Download
