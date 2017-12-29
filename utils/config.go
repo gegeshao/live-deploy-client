@@ -20,6 +20,7 @@ type Config struct {
   CheckServer string `yaml:"-"`
   TaskServer string `yaml:"-"`
   LoadDefaultTask []string `yaml:"load_default_task"`
+  LuaScriptsDir string `yaml:"-"`
 }
 
 var config *Config
@@ -46,6 +47,7 @@ func InitConfig(source string) (*Config, error) {
     config.TaskServer = u.String()
     config.CheckServer = checkU.String()
   }
+  config.LuaScriptsDir = "scripts"
 
 
 	return config, nil

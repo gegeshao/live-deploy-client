@@ -13,19 +13,23 @@ func Execute(L *lua.LState) int{
     params = append(params, L.CheckString(i))
   }
   cmd := exec.Command(command, params...)
+  var errBuf bytes.Buffer
   var outBuf bytes.Buffer
-
-  cmd.Stderr = &outBuf
+  cmd.Stdout = &outBuf
+  cmd.Stderr = &errBuf
   startErr := cmd.Start()
-  waritErr := cmd.Wait()
+  waitErr := cmd.Wait()
+  err := errBuf.String()
   out := outBuf.String()
-  if startErr != nil || waritErr != nil {
+  allOut:=""
+  if err != ""{ allOut = allOut + err}
+  if out != ""{allOut = allOut + out}
+  if startErr != nil || waitErr != nil {
     L.Push(lua.LBool(false))
-    L.Push(lua.LString(out))
+    L.Push(lua.LString(allOut))
   } else {
-
     L.Push(lua.LBool(true))
-    L.Push(lua.LString(out))
+    L.Push(lua.LString(allOut))
   }
   return 2
 }

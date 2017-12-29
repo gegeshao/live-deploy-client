@@ -4,15 +4,14 @@ import (
   "fmt"
   "live-deploy-client/schema"
   "live-deploy-client/utils"
+  "live-deploy-client/vm"
   "log"
   "reflect"
   "strings"
-
-  "github.com/yuin/gopher-lua"
 )
 
 type DefaultTaskMaid struct{}
-func (maid *DefaultTaskMaid) UpdateScripts(task *schema.Task, L *lua.LState)(bool, string){
+func (maid *DefaultTaskMaid) UpdateScripts(task *schema.Task)(bool, string){
   filename:=task.Action
   url:=task.Content
   //保证安全
@@ -21,12 +20,15 @@ func (maid *DefaultTaskMaid) UpdateScripts(task *schema.Task, L *lua.LState)(boo
     log.Println(err)
     return false, err.Error()
   }
-  L.DoString()
+  //加载新的脚本
+  if err := vm.LoadScript(filename); err!=nil{
+    return false, fmt.Sprintf("加载%s脚本失败: %v", filename, err)
+  }
   return true, filename
 }
 
 
-func DoDefalutTask(task *schema.Task, L *lua.LState) (exist bool, status bool,result string) {
+func DoDefalutTask(task *schema.Task) (exist bool, status bool,result string) {
   taskType := task.Type
   config:=utils.GetConfig()
   allow := false
@@ -43,7 +45,7 @@ func DoDefalutTask(task *schema.Task, L *lua.LState) (exist bool, status bool,re
   if method.Kind().String() == "invalid"{
     return
   }
-  returnValue := method.Call([]reflect.Value{reflect.ValueOf(task), reflect.ValueOf(L)})
+  returnValue := method.Call([]reflect.Value{reflect.ValueOf(task)})
   return true, returnValue[0].Bool(), returnValue[1].String()
 }
 

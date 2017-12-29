@@ -1,7 +1,7 @@
-package allocation
+package vm
 
 import ("github.com/yuin/gopher-lua"
-  luaModule "live-deploy-client/task/allocation/lua_module"
+  luaModule "live-deploy-client/vm/lua_module"
 )
 
 func Loader(L *lua.LState) int{

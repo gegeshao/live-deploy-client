@@ -10,12 +10,11 @@ import (
   "bytes"
   "live-deploy-client/schema"
   "github.com/huyinghuan/cfb"
-  "github.com/yuin/gopher-lua"
 )
 var (
   client = &http.Client{}
 )
-func Get(L *lua.LState){
+func Get(){
   config:=utils.GetConfig()
   machineKey := config.MachineID
   cfbKey := config.PrivateKey
@@ -34,7 +33,7 @@ func Get(L *lua.LState){
   }
   //没有任务
   if resp.Header.Get("task-count") == "none"{
-    log.Println("没有任务")
+    log.Println("nothing")
     return
   }
 
@@ -55,7 +54,7 @@ func Get(L *lua.LState){
   taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
     //做任务去
-    taskDone := allocation.DoTask(L, &task)
+    taskDone := allocation.DoTask(&task)
     taskDoneList = append(taskDoneList, taskDone)
   }
   //发送完成状态

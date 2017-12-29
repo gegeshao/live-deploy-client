@@ -4,13 +4,15 @@ import (
   "fmt"
   "live-deploy-client/schema"
   "live-deploy-client/task/allocation/default_task"
+  "live-deploy-client/vm"
 
   "github.com/yuin/gopher-lua"
 )
 
-func DoTask(L *lua.LState, task *schema.Task) schema.TaskClientFinish{
+func DoTask(task *schema.Task) schema.TaskClientFinish{
+  L := vm.GetLuaVM()
   task.TaskID = task.ID
-  if exist, status, result := default_task.DoDefalutTask(task, L); exist{
+  if exist, status, result := default_task.DoDefalutTask(task); exist{
     return schema.TaskClientFinish{
       ID: task.TaskID,
       Status: status,
