@@ -35,10 +35,11 @@ func main(){
   }
 
 	//task.Get()
-	taskTimer := make(chan int)
+	//阅读 《Go语言高级编程》 ，改为匿名struct可以减少内存空间使用
+	taskTimer := make(chan struct{})
 	go func(){
 		for {
-			taskTimer <- 1
+			taskTimer <- struct{}{}
 			time.Sleep(5 * time.Second)
 		}
  	}()
