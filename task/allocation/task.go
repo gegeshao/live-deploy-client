@@ -12,6 +12,7 @@ import (
 func DoTask(task *schema.Task) schema.TaskClientFinish{
   L := vm.GetLuaVM()
   task.TaskID = task.ID
+  //默认任务类型
   if exist, status, result := default_task.DoDefalutTask(task); exist{
     return schema.TaskClientFinish{
       ID: task.TaskID,
@@ -19,7 +20,7 @@ func DoTask(task *schema.Task) schema.TaskClientFinish{
       Result:  result,
     }
   }
-  //TODO 检查是否已经完成
+  //对比数据库检查该任务是否已经完成
   if existTask, err:=schema.GetTaskByID(task.ID); existTask !=nil && err == nil{
     status:= false
     if existTask.Status == 1 {

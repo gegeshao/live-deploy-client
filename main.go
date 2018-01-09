@@ -9,19 +9,19 @@ import (
   "time"
 )
 
-func main(){
-	config, err := utils.InitConfig("./conf/config.yaml")
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
+func init(){
+  config, err := utils.InitConfig("./conf/config.yaml")
+  if err != nil {
+    log.Fatalln(err)
+    return
+  }
 
-	//校验密钥
+  //校验密钥
   if len(config.System.PrivateKey) != 24{
     log.Fatalln("密钥错误!")
   }
   if err:=task.Check(); err!=nil{
-  	log.Println(err)
+    log.Println(err)
     log.Fatalln("密钥错误!")
   }
   //初始化虚拟机
@@ -33,7 +33,9 @@ func main(){
     log.Fatalln(err)
     return
   }
+}
 
+func main(){
 	//task.Get()
 	//阅读 《Go语言高级编程》 ，改为匿名struct可以减少内存空间使用
 	taskTimer := make(chan struct{})
@@ -50,5 +52,4 @@ func main(){
  			task.Get()
 		}
 	}()
-
 }
