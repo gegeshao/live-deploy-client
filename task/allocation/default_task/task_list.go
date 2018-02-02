@@ -11,6 +11,15 @@ import (
 )
 
 type DefaultTaskMaid struct{}
+
+/*
+{
+    id: xxx,
+    type: "UpdateScripts"
+    action: filename
+    content: download-url
+}
+*/
 func (maid *DefaultTaskMaid) UpdateScripts(task *schema.Task)(bool, string){
   filename:=task.Action
   url:=task.Content
@@ -27,6 +36,17 @@ func (maid *DefaultTaskMaid) UpdateScripts(task *schema.Task)(bool, string){
   return true, filename
 }
 
+/*
+{
+    id: xxx,
+    type: "UpdateScripts"
+    action: filename
+    content: download-url
+}
+*/
+func (maid *DefaultTaskMaid) Install(task *schema.Task){
+
+}
 
 func DoDefalutTask(task *schema.Task) (exist bool, status bool,result string) {
   taskType := task.Type

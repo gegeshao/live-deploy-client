@@ -5,3 +5,4 @@ system:
   load_default_task: ['UpdateScripts']
 plugin:
   nginx_config_path: /Users/hyh/Downloads/http-config
+  install_path: software

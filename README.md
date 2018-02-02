@@ -50,6 +50,22 @@ load_default_task: ['UpdateScripts'] #是否允许下载脚本,为了安全性�
 }
 ```
 
+### Install
+
+开启该功能需要在 config.yaml中配置`load_default_task`,使客户端能够 禁用/开启 开功能。
+
+下发任务内容
+
+```
+{
+    id: xxx,
+    type: "Install"
+    action: filename
+    content: download-url
+}
+```
+
+
 ## 已有任务脚本
 
 所有任务脚本的配置 全部配置在`config.yaml`中的`plugin`的字段中

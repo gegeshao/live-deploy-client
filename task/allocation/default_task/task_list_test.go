@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 
 func TestDoDefalutTask(t *testing.T) {
   exits, status, result:=DoDefalutTask(&schema.Task{
-    Type: "Download",
+    Type: "UpdateScripts",
     Action:"nginx.lua",
     Content: "xxxxx.com/xxx.lua",
   })
