@@ -2,8 +2,6 @@ package utils
 
 import (
 	"io/ioutil"
-  "os"
-  "path/filepath"
 
   "fmt"
 	"gopkg.in/yaml.v2"
@@ -18,7 +16,6 @@ type System struct{
   CheckServer string `yaml:"-"`
   TaskServer string `yaml:"-"`
   LoadDefaultTask []string `yaml:"load_default_task"`
-  InstallPath string `yaml:"-"` //软件下载安装目录
 }
 
 //Config 配置文件
@@ -29,27 +26,6 @@ type Config struct {
 }
 
 var config *Config
-
-func checkAndInitInstallScriptConfig(){
-  loadInstall := false
-  for _, value := range config.System.LoadDefaultTask{
-    if value == "Install"{
-      loadInstall = true
-      break
-    }
-  }
-  //没有启用 Install 插件
-  if !loadInstall{
-    return
-  }
-  config.System.InstallPath = "software"
-  ex, err := os.Executable()
-  if err != nil {
-    panic(err)
-  }
-  exPath := filepath.Dir(ex)
-  fmt.Println(exPath)
-}
 
 func initServerConfig() error{
   //校验服务器配置
@@ -84,8 +60,6 @@ func InitConfig(source string) (*Config, error) {
   if err := initServerConfig(); err!=nil{
     return nil, err
   }
-  //校验 Install 配置
-  checkAndInitInstallScriptConfig()
   initLuaScript()
 	return config, nil
 }

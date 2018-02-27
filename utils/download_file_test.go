@@ -1,9 +1,11 @@
 package utils
 
 import (
+  "io"
   "log"
   "net/http"
   "os"
+  "path"
   "regexp"
   "strings"
   "testing"
@@ -23,9 +25,6 @@ func TestDownload(t *testing.T){
     t.Fail()
   }
   defer response.Body.Close()
-  for key, value := range response.Header{
-    log.Println(key, value)
-  }
   filename := ""
   desposition := response.Header.Get("Content-Disposition")
   reg:=regexp.MustCompile(`(?m)filename[^;=]*=['"]?([^;'"]+)['"]?`)
@@ -36,8 +35,24 @@ func TestDownload(t *testing.T){
   }else{
     filename = regResult[1]
   }
-  log.Println(filename)
   config:= GetConfig()
-  downloadDir := config.System.InstallPath
-  log.Println(downloadDir)
+  installDir := config.System.InstallPath
+  switch response.Header.Get("Content-Type"){
+  case  "application/x-gzip":
+  default:
+    filename = path.Join(installDir, filename)
+    log.Println(filename)
+    file, err := os.Create(filename)
+    if err != nil {
+      log.Println(err)
+      t.Fail()
+    }
+    if _, err := io.Copy(file, response.Body); err!=nil{
+      log.Println(err)
+      t.Fail()
+    }
+    file.Close()
+  }
+
+
 }

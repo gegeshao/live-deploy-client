@@ -54,7 +54,7 @@ func Get(){
   taskDoneList := []schema.TaskClientFinish{}
   for _, task:= range taskList{
     //做任务去
-    taskDone := allocation.DoTask(&task)
+    taskDone := allocation.Dispatch(&task)
     taskDoneList = append(taskDoneList, taskDone)
   }
   //发送完成状态

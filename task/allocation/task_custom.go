@@ -3,23 +3,14 @@ package allocation
 import (
   "fmt"
   "live-deploy-client/schema"
-  "live-deploy-client/task/allocation/default_task"
   "live-deploy-client/vm"
 
   "github.com/yuin/gopher-lua"
 )
 
-func DoTask(task *schema.Task) schema.TaskClientFinish{
+func DoCustomTask(task *schema.Task) schema.TaskClientFinish{
   L := vm.GetLuaVM()
   task.TaskID = task.ID
-  //默认任务类型
-  if exist, status, result := default_task.DoDefalutTask(task); exist{
-    return schema.TaskClientFinish{
-      ID: task.TaskID,
-      Status: status,
-      Result:  result,
-    }
-  }
   //对比数据库检查该任务是否已经完成
   if existTask, err:=schema.GetTaskByID(task.ID); existTask !=nil && err == nil{
     status:= false

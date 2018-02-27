@@ -1,4 +1,4 @@
-package default_task
+package allocation
 
 import (
   "live-deploy-client/schema"
@@ -19,13 +19,10 @@ func TestMain(m *testing.M) {
 }
 
 func TestDoDefalutTask(t *testing.T) {
-  exits, status, result:=DoDefalutTask(&schema.Task{
+  finishTask := Dispatch(&schema.Task{
     Type: "UpdateScripts",
     Action:"nginx.lua",
     Content: "xxxxx.com/xxx.lua",
   })
-  if !exits{
-    t.Fail()
-  }
-  log.Println(status, result)
+  log.Println(finishTask)
 }
