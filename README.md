@@ -127,6 +127,10 @@ gosystem包含以下方法
 
 用于执行系统命令, 如  `gosystem.execute("nginx". "-t")`
 
+#### executeCWD(cwd, command, arg...)
+
+用于执行系统命令, 如  `gosystem.executeCWD("/home/xxx/xx/workspace", "nginx". "-t")`
+
 #### path
 
 返回一个table 包含 如下函数：
