@@ -2,6 +2,8 @@ package utils
 
 import (
 	"io/ioutil"
+  "os"
+  "path/filepath"
 
   "fmt"
 	"gopkg.in/yaml.v2"
@@ -15,6 +17,7 @@ type System struct{
   PrivateKey string `yaml:"private_key"`
   CheckServer string `yaml:"-"`
   TaskServer string `yaml:"-"`
+  ProjectDir string `yaml:"project_dir"`
   LoadDefaultTask []string `yaml:"load_default_task"`
 }
 
@@ -23,9 +26,22 @@ type Config struct {
 	System *System `yaml:"system"`
 	Plugin interface{} `yaml:"plugin"`
   LuaScriptsDir string `yaml:"-"`
+  CWD string `yaml:"-"`
 }
 
 var config *Config
+
+func SetCWD(cwd string) error{
+  if cwd != ""{
+    ex, err := os.Executable()
+    if err != nil {
+      return err
+    }
+    cwd = filepath.Dir(ex)
+  }
+  config.CWD = cwd
+  return nil
+}
 
 func initServerConfig() error{
   //校验服务器配置
@@ -42,8 +58,18 @@ func initServerConfig() error{
   return nil
 }
 
-func initLuaScript(){
+func initLuaScript() error{
   config.LuaScriptsDir = "scripts"
+  return os.MkdirAll(config.LuaScriptsDir, 0644)
+}
+
+func initProjectDir()error{
+  if config.System.ProjectDir == ""{
+    return nil
+  }
+  if !path.IsAbs(config.System.ProjectDir){
+  }
+  return os.MkdirAll(config.LuaScriptsDir, 0644)
 }
 
 
@@ -57,10 +83,16 @@ func InitConfig(source string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
   if err := initServerConfig(); err!=nil{
     return nil, err
   }
-  initLuaScript()
+  if err := initLuaScript();err!=nil{
+    return nil, err
+  }
+  if err := initProjectDir();err!=nil{
+    return nil, err
+  }
 	return config, nil
 }
 

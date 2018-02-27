@@ -4,3 +4,4 @@ vendor
 *.db
 live-deploy-client
 bin/*
+projects

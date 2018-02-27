@@ -3,6 +3,7 @@ system:
   machine_id: "xxx"
   private_key: "xx"
   load_default_task: ['UpdateScripts']
+  projectsDir: "projects"
+  LuaScripts: "scripts"
 plugin:
   nginx_config_path: /Users/hyh/Downloads/http-config
-  install_path: software
