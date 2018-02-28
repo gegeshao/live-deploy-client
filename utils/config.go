@@ -32,15 +32,30 @@ type Config struct {
 var config *Config
 
 func SetCWD(cwd string) error{
-  if cwd != ""{
+  if cwd == ""{
     ex, err := os.Executable()
     if err != nil {
       return err
     }
     cwd = filepath.Dir(ex)
   }
+  if(config == nil){
+    config = new(Config)
+  }
   config.CWD = cwd
   return nil
+}
+
+func init(){
+  SetCWD("")
+}
+
+
+func getProjectFilePath(filepath string) string{
+  if path.IsAbs(filepath) {
+    return filepath
+  }
+  return path.Join(config.CWD, filepath)
 }
 
 func initServerConfig() error{
@@ -59,23 +74,28 @@ func initServerConfig() error{
 }
 
 func initLuaScript() error{
-  config.LuaScriptsDir = "scripts"
+  if config.LuaScriptsDir == ""{
+    config.LuaScriptsDir = "scripts"
+  }
+  config.LuaScriptsDir = getProjectFilePath(config.LuaScriptsDir)
+
   return os.MkdirAll(config.LuaScriptsDir, 0644)
 }
 
 func initProjectDir()error{
   if config.System.ProjectDir == ""{
-    return nil
+    config.System.ProjectDir = "projects"
   }
   if !path.IsAbs(config.System.ProjectDir){
+    config.System.ProjectDir = getProjectFilePath(config.System.ProjectDir)
   }
-  return os.MkdirAll(config.LuaScriptsDir, 0644)
+  return os.MkdirAll(config.System.ProjectDir, 0644)
 }
 
 
 //InitConfig 读取配置文件
 func InitConfig(source string) (*Config, error) {
-	configBytes, err := ioutil.ReadFile(source)
+	configBytes, err := ioutil.ReadFile(getProjectFilePath(source))
 	if err != nil {
 		return nil,err
 	}
@@ -83,7 +103,6 @@ func InitConfig(source string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-
   if err := initServerConfig(); err!=nil{
     return nil, err
   }

@@ -5,18 +5,10 @@ import (
   "log"
   "net/http"
   "os"
-  "path"
   "regexp"
   "strings"
   "testing"
 )
-var CONFIGPATH = "/Users/hyh/go-work/src/live-deploy-client/conf/config.yaml"
-
-func TestMain(m *testing.M) {
-  InitConfig(CONFIGPATH)
-  // call flag.Parse() here if TestMain uses flags
-  os.Exit(m.Run())
-}
 
 func TestDownload(t *testing.T){
   url := "https://api.github.com/repos/certbot/certbot/tarball/v0.21.1"
@@ -35,12 +27,12 @@ func TestDownload(t *testing.T){
   }else{
     filename = regResult[1]
   }
-  config:= GetConfig()
-  installDir := config.System.InstallPath
+  //config:= GetConfig()
+  //installDir := config.System.InstallPath
   switch response.Header.Get("Content-Type"){
   case  "application/x-gzip":
   default:
-    filename = path.Join(installDir, filename)
+    //filename = path.Join(installDir, filename)
     log.Println(filename)
     file, err := os.Create(filename)
     if err != nil {

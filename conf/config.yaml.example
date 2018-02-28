@@ -7,3 +7,4 @@ system:
   LuaScripts: "scripts"
 plugin:
   nginx_config_path: /Users/hyh/Downloads/http-config
+cwd: ""
