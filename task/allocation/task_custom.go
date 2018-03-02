@@ -9,7 +9,7 @@ import (
 )
 
 func DoCustomTask(task *schema.Task) schema.TaskClientFinish{
-  L := vm.GetLuaVM()
+
   task.TaskID = task.ID
   //对比数据库检查该任务是否已经完成
   if existTask, err:=schema.GetTaskByID(task.ID); existTask !=nil && err == nil{
@@ -24,9 +24,15 @@ func DoCustomTask(task *schema.Task) schema.TaskClientFinish{
       Result:  existTask.Result,
     }
   }
+
+  L := vm.GetLuaVM()
+
+  if L.GetGlobal(task.Type)==lua.LNil{
+    return TaskFail(task, "脚本插件错误: 脚本缺少任务类型:"+task.Action)
+  }
   tab:=L.GetGlobal(task.Type).(*lua.LTable)
   if L.GetField(tab, task.Action) == lua.LNil{
-    return TaskFail(task, "脚本插件错误: 脚本缺少任务函数:"+task.Action)
+    return TaskFail(task, "脚本插件错误: 脚本缺少任务函数:"+task.Type)
   }
   p:=lua.P{
     Fn: L.GetField(tab, task.Action),

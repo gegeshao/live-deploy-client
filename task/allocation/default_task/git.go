@@ -1,31 +1,13 @@
 package default_task
 
 import (
-  "bytes"
   "live-deploy-client/schema"
   "live-deploy-client/utils"
-  "os/exec"
 	"fmt"
+  "path"
+  "strings"
 )
 
-func execute(cwd string, command string, params ...string)(result string, success bool){
-  cmd := exec.Command(command, params...)
-  cmd.Path = cwd
-  var errBuf bytes.Buffer
-  var outBuf bytes.Buffer
-  cmd.Stdout = &outBuf
-  cmd.Stderr = &errBuf
-  startErr := cmd.Start()
-  waitErr := cmd.Wait()
-  err := errBuf.String()
-  out := outBuf.String()
-  if err != ""{ result = result + err}
-  if out != ""{ result = result + out}
-  if startErr != nil || waitErr != nil {
-    return result, false
-  }
-  return result, true
-}
 
 /**
 {
@@ -35,16 +17,14 @@ action: clone
 content: xxx
 }
 **/
-func (maid *DefaultTaskMaid) Git(task *schema.Task)(string, bool){
+func (maid *DefaultTaskMaid) Git(task *schema.Task)(bool, string){
 	switch task.Action {
 	case "clone":
 		return clone(task)
-	case "pull":
-		return pull(task)
 	case "checkout":
 		return checkout(task)
 	default:
-		return fmt.Sprintf("undefine action type: %s", task.Action), false
+		return false, fmt.Sprintf("Git undefine action type: %s", task.Action)
 	}
 
 }
@@ -52,37 +32,38 @@ func (maid *DefaultTaskMaid) Git(task *schema.Task)(string, bool){
 /**
 {
 id: xxx,
-type: "clone"
+type: "Git"
 action: clone
 content: git url
 }
 **/
-func clone(task *schema.Task)(string, bool){
+func clone(task *schema.Task)(bool, string){
   config:=utils.GetConfig()
   return execute(config.System.ProjectDir, "git", "clone", task.Content)
 }
-/**
-{
-id: xxx,
-type: "pull"
-action: pull
-content: project name
-}
-**/
-func pull(task *schema.Task)(string, bool){
+
+func pull(projectName string)(bool, string){
 	config:=utils.GetConfig()
-	return execute(config.System.ProjectDir, "git", "pull", task.Content)
+	return execute(path.Join(config.System.ProjectDir, projectName), "git", "pull", "origin", "master")
 }
 
 /**
 {
 id: xxx,
-type: "pull"
-action: pull
-content: commit hash
+type: "Git"
+action: checkout
+content: projectName, commit hash
 }
 **/
-func checkout(task *schema.Task)(string, bool){
+func checkout(task *schema.Task)(bool, string){
 	config:=utils.GetConfig()
-	return execute(config.System.ProjectDir, "git", "checkout", task.Content)
+	content := strings.Split(task.Content, ",")
+	if len(content)!=2 {
+	  return false, "content is illegal"
+  }
+	pullSuccess, pullResult := pull(content[0])
+	if !pullSuccess{
+	  return false,pullResult
+  }
+	return execute(path.Join(config.System.ProjectDir, content[0]), "git", "checkout", content[1])
 }

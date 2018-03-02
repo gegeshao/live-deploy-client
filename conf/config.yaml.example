@@ -2,7 +2,7 @@ system:
   server: http://127.0.0.1:8080
   machine_id: "xxx"
   private_key: "xx"
-  load_default_task: ['UpdateScripts']
+  load_default_task: ['UpdateScripts', 'Git', 'PM2']
   projectsDir: "projects"
   LuaScripts: "scripts"
 plugin:
