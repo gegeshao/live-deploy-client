@@ -4,7 +4,6 @@ set -e
 
 run=task-deploy
 workdir=$HOME/task-deploy
-echo Begin install VPS Monitor: $run
 echo Workspace: $workdir
 if [ ! -d "$workdir" ]; then
   mkdir -p $workdir
