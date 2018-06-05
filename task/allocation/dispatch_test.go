@@ -89,3 +89,22 @@ func TestDonotExistTask(t *testing.T){
     t.Fail()
   }
 }
+
+
+func TestAB(t *testing.T){
+  finishTask := Dispatch(&schema.Task{
+    Type:"ab",
+    Action: "deploy",
+    Content: `
+      server{
+          listen 80;
+          server_name test.com;
+          root /var/www/;
+      }
+    `,
+    TrackID: 9,
+  })
+  if !finishTask.Status{
+    t.Fail()
+  }
+}

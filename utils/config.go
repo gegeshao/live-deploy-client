@@ -25,6 +25,7 @@ type System struct{
 type Config struct {
 	System *System `yaml:"system"`
 	Plugin interface{} `yaml:"plugin"`
+  PrepareDir []string `yaml:"prepare_dir"`
   LuaScriptsDir string `yaml:"-"`
   CWD string `yaml:"-"`
 }
@@ -56,6 +57,12 @@ func getProjectFilePath(filepath string) string{
     return filepath
   }
   return path.Join(config.CWD, filepath)
+}
+
+func initPrepareDir(){
+  for _, filepath := range config.PrepareDir{
+    os.MkdirAll(filepath, 0644)
+  }
 }
 
 func initServerConfig() error{
@@ -112,6 +119,7 @@ func InitConfig(source string) (*Config, error) {
   if err := initProjectDir();err!=nil{
     return nil, err
   }
+  initPrepareDir()
 	return config, nil
 }
 

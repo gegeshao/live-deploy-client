@@ -33,7 +33,7 @@ func InitDriver() error {
   var connectErr error
   engine, connectErr = xorm.NewEngine("sqlite3", "task.db")
 
-  engine.ShowSQL(true)
+  //engine.ShowSQL(true)
 
   if connectErr != nil {
     return connectErr

@@ -33,7 +33,7 @@ func Get(){
   }
   //没有任务
   if resp.Header.Get("task-count") == "none"{
-    log.Println("nothing")
+    //log.Println("nothing")
     return
   }
 
@@ -47,6 +47,7 @@ func Get(){
   r, err:= cfb.Decrypt([]byte(cfbKey), body)
   if err!=nil{
     log.Println("任务解析失败", err)
+    return
   }
   dec := gob.NewDecoder(bytes.NewReader(r))
   var taskList []schema.Task

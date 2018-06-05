@@ -4,12 +4,14 @@ import (
   "io/ioutil"
   "live-deploy-client/utils"
   "github.com/yuin/gopher-lua"
+  "log"
+  "path"
 )
 
-func getScript(filename string)(string, error){
-  fileContent, err:=ioutil.ReadFile("scripts/"+filename)
+func getScript(filepath string)(string, error){
+  fileContent, err:=ioutil.ReadFile(filepath)
   if err!=nil{
-    return "", nil
+    return "", err
   }
   return string(fileContent), nil
 }
@@ -39,13 +41,14 @@ func InitLuaVM()(error){
     if file.IsDir(){
       continue
     }
-    fileContent, err:= getScript(file.Name())
+    fileContent, err:= getScript(path.Join(config.LuaScriptsDir, file.Name()))
     if err!=nil{
       return err
     }
     if err := L.DoString(fileContent); err!=nil{
       return  err
     }
+    log.Printf("加载 %s 插件成功!\n", file.Name())
   }
   vm.luaState = L
   return nil

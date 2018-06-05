@@ -13,10 +13,12 @@ import (
 */
 func (maid *DefaultTaskMaid) PM2(task *schema.Task)(bool, string){
 	switch task.Action {
-  case "start":
-    return start(task)
+  	case "start":
+    	return pm2Start(task)
 	case "restart":
-		return restart(task)
+		return pm2Restart(task)
+	case "stop":
+		return pm2Stop(task)
 	default:
 		return false, fmt.Sprintf("PM2 undefine action type: %s", task.Action)
 	}
@@ -29,7 +31,7 @@ action: restart
 content: projectname
 */
 
-func restart(task *schema.Task)(bool, string){
+func pm2Restart(task *schema.Task)(bool, string){
   config:=utils.GetConfig()
   projectName := task.Content
   command := []string{"restart", projectName}
@@ -43,7 +45,7 @@ action: start
 content: projectName, filepath
 */
 
-func start(task *schema.Task)(bool, string){
+func pm2Start(task *schema.Task)(bool, string){
   config:=utils.GetConfig()
   content := strings.Split(task.Content, ",")
   if len(content)!=2 {
@@ -53,4 +55,22 @@ func start(task *schema.Task)(bool, string){
   filepath := content[1]
   command:= []string{"start", filepath, "--name", projectName}
   return execute(path.Join(config.System.ProjectDir,projectName), "pm2", command...)
+}
+
+/**
+id: xxx,
+type: "PM2"
+action: start
+content: projectName
+*/
+
+func pm2Stop(task *schema.Task)(bool, string){
+	config:=utils.GetConfig()
+	content := strings.Split(task.Content, ",")
+	if len(content)!=2 {
+		return false, "content is illegal"
+	}
+	projectName := content[0]
+	command:= []string{"stop", projectName}
+	return execute(path.Join(config.System.ProjectDir,projectName), "pm2", command...)
 }

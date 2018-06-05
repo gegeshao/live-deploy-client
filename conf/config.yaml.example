@@ -8,3 +8,4 @@ system:
 plugin:
   nginx_config_path: /Users/hyh/Downloads/http-config
 cwd: ""
+prepare_dir: ["/var/log/nginx"]
