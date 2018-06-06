@@ -14,7 +14,7 @@ end
 
 function nginx.deploy(trackID, trackKey, content)
     config = gosystem.getConfig()
-    nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "id-"..trackID .. ".conf")
+    nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "nginx-id-"..trackID .. ".conf")
     status, errorInfo = pcall(writeFile, nginxConfigPath, content)
     if(not status) then return {status = false, result = errorInfo} end
     ok, msg = gosystem.execute("nginx", "-t")
@@ -33,7 +33,7 @@ end
 
 function nginx.undeploy(trackID, trackKey, content)
     config = gosystem.getConfig()
-    nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "id-"..trackID .. ".conf")
+    nginxConfigPath = gosystem.path().join(config["nginx_config_path"], "nginx-id-"..trackID .. ".conf")
     os.remove(nginxConfigPath)
     ok, msg = gosystem.execute("nginx", "-t")
     if not ok then

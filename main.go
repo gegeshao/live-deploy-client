@@ -36,6 +36,7 @@ func init(){
 }
 
 func main(){
+  log.Println("Version: 1.0")
 	//task.Get()
 	//阅读 《Go语言高级编程》 ，改为匿名struct可以减少内存空间使用
 	taskTimer := make(chan struct{})
