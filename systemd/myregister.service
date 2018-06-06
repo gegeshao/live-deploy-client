@@ -1,11 +1,11 @@
 [Unit]
-Description=$name Monitor
+Description=$name
 #/etc/systemd/system/xxx.service
 [Service]
 Type=simple
 User=root
 WorkingDirectory=$work/$name
-ExecStart=$work/$name/$name
+ExecStart=$work/$name
 Restart=on-failure # or always, on-abort, etc
 
 [Install]
